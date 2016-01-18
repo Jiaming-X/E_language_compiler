@@ -1,0 +1,65 @@
+Name: Jiaming Xie
+SID: 998578563
+
+1. All the part 1 to part 5 work perfectly fine, and the outputs match the correct one.
+
+
+
+More explainations about part 5
+
+the new and modified BNF:
+
+
+
+program ::= block
+block ::= declaration_list statement_list
+declaration_list ::= {declaration}
+statement_list ::= {statement}
+declaration ::= ’@’ id { ’,’ id }
+
+statement ::= assignment | print | do | if | for    // for is the one that added
+
+print ::= ’!’ expr
+assignment ::= ref_id ’=’ expr
+ref_id ::= [ ’˜’ [ number ] ] id
+do ::= ’<’ guarded_command ’>’
+if ::= ’[’ guarded_command { ’|’ guarded_command } [ ’%’ block ] ’]’
+guarded_command ::= expr ’:’ block
+expr ::= term { addop term }
+term ::= factor { multop factor }
+factor ::= ’(’ expr ’)’ | ref_id | number
+addop ::= ’+’ | ’-’
+multop ::= ’*’ | ’/’
+
+// The added parts for for loop:
+for ::= '{' declaration2 ',' expr ','  increment ':' block '}'
+declaration2 ::= '@' id '=' number
+increment ::= id '=' id addop number
+
+
+
+
+It's more convenient to added parts into the old one rather than largely modified the old one.
+Therefore I chose to added some rules.
+The first new rules for ::= '{' declaration2 ',' expr ','  increment ':' block '}' fundamentally
+decide the way that the problem detect the for loop structure. The declaration2 is for declaration.
+Although we already have a declaration, I chose to implement a new one, since it can limit the user
+to only use one index to control the for loop. As for the expr part, it works similarly as the one
+in while loop condition: as loop as the expr is nonpositive, it's true and the loop keeps working;
+when it's negative, it stops, and get out of the for loop. The increment part deciede how the index
+controler control the for loop. 
+
+For the test files:
+t01, checking normal for loop
+t02, checking a normal for loop with more i index
+t03, checking a nest for loop
+t04, put a nest for loop inside if block
+t05, add more print variables into t04. 
+
+These test cases all work perfectly fine, and the program can use them to generate correct code. 
+
+
+
+
+
+
